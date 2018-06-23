@@ -4,6 +4,7 @@ import com.example.boot.core.ret.RetResponse;
 import com.example.boot.core.ret.RetResult;
 import com.example.boot.model.UserInfo;
 import com.example.boot.service.UserInfoService;
+import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -43,6 +44,20 @@ public class UserInfoController {
         a.size();
         UserInfo userInfo = userInfoService.selectById(id);
         return RetResponse.makeOKRsp(userInfo);
+    }
+
+
+    @ApiOperation(value = "查询用户", notes = "分页查询用户所有")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page", value = "当前页码",
+                    dataType = "Integer", paramType = "query"),
+            @ApiImplicitParam(name = "size", value = "每页显示条数",
+                    dataType = "Integer", paramType = "query")
+    })
+    @PostMapping(value = "/selectAll")
+    public RetResult<PageInfo<UserInfo>> selectAll(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size) {
+        PageInfo<UserInfo> pageInfo = userInfoService.selectAll(page, size);
+        return RetResponse.makeOKRsp(pageInfo);
     }
 
 
